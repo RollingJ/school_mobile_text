@@ -1,0 +1,27 @@
+a{ width:200px;
+    font-size: 30px;
+    font-weight: bold;
+    text-decoration: none;
+    float:left;
+    text-align: center;
+    color:#fffcfc;
+    background-color: #109eff;
+
+}
+
+a:link{
+    background-color: #109eff;
+}
+
+a:visited{
+   background-color: #ff0000;
+}
+
+a:hover{
+    background-color: #356bff;
+}
+
+a:active{
+    background-color: #ffff00;
+    background-position:0 -20px;
+}

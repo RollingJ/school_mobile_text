@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>简易动态时钟</h1>
+<hr/>
+<canvas id="clock" width="300px" height="300px" style="border: 1px solid"></canvas>
+</body>
+<script>
+    var canvas = document.getElementById('clock');
+    if (canvas.getContext) {
+        console.log('你的浏览器支持Canvas!');
+    } else {
+        console.log('你的浏览器不支持Canvas!');
+    }
+
+    var ctx = canvas.getContext("2d");
+
+    function origin() {
+        ctx.save();
+    }
+    function splate() {
+        ctx.beginPath();
+        ctx.translate(150,150);
+    ctx.arc(0,0,5,0,2*Math.PI,false);  /*绘制时钟中心点  */
+    ctx.fillStyle = "rgb(0,0,0)";
+    ctx.fill();
+    ctx.stroke();
+    ctx.closePath();
+
+    ctx.beginPath();
+    ctx.arc(0,0,140,0,2*Math.PI,false);  /*绘制表盘*/
+    ctx.stroke();
+    ctx.closePath();
+    ctx.save();
+
+    ctx.beginPath();     /*绘制时针刻度*/
+    for(var i=0;i<12;i++)
+    {
+        ctx.fillStyle = "rgb(0,0,0)";
+
+        ctx.fillRect(-3,-140,6,20);
+        ctx.rotate(2/12*Math.PI);
+    }
+    ctx.closePath();
+
+    ctx.beginPath();    /*绘制分针刻度*/
+    for(var i=0;i<60;i++)
+    {
+        ctx.fillRect(-1,-140,2,10);
+        ctx.rotate(2/60*Math.PI);
+    }
+    ctx.restore();
+    }
+
+    function change(hour,minute,second)
+    {   ctx.save();
+        ctx.beginPath();   /*开始绘制时针*/
+        ctx.lineWidth=6;
+        ctx.save();
+        ctx.rotate(hour/12*2*Math.PI+minute*2*Math.PI/720);
+        ctx.moveTo(0,0);
+        ctx.lineCap = "round";
+        ctx.lineTo(0,-50);
+        ctx.stroke();
+        ctx.closePath();
+        ctx.restore();
+
+        ctx.beginPath();    /*开始绘制分针*/
+        ctx.lineWidth=3;
+        ctx.lineCap = "round";
+        ctx.save();
+        ctx.rotate(minute/60*2*Math.PI+2*Math.PI*second/3600);
+        ctx.moveTo(0,0);
+        ctx.lineTo(0,-100);
+        ctx.stroke();
+        ctx.closePath();
+        ctx.restore();
+
+        ctx.beginPath();    /*开始绘制秒针*/
+        ctx.lineWidth=1;
+        ctx.save();
+        ctx.strokeStyle = "red";
+        ctx.rotate(2*second/60*Math.PI);
+        ctx.lineCap = "round";
+        ctx.moveTo(0,0);
+        ctx.lineTo(0,-120);
+        ctx.stroke();
+        ctx.closePath();
+        ctx.restore();
+
+    }
+
+    function draw() {
+
+        /* ctx.clearRect(-150,-150,300,300),这是原本的设置，但是后来才发觉，每次在draw函数调用完毕之后，
+        我把原点重新定位在0,0，
+        clearrect要受后面函数影响，
+        所有的绘图都被我封装为了函数，所以在绘画之前，原点仍然是0,0，并不需要采用-150，-150,这也是我为什么前几次无法清除一三四象限秒针的原因，*/
+
+        ctx.clearRect(0,0,300,300);
+        splate();
+
+        /*要注意的是ctx.save和restore并不是一个类似于快照的东西，
+        不能用它来清空画布，它的作用是例如
+        xyz
+        ctx.save;
+        jkx
+        aaa
+        sss
+        ctx.restore
+        他们是用来避免xyz被后面的
+        jkx、aaa、sss等绘图操作
+        或者设置所影响，就如同分针要受秒针旋转角度所影响，如不设置save、restore，Rotate则为全局的角度旋转*/
+
+        var now=new Date;
+        var time=now.toLocaleTimeString();
+        var hour=now.getHours();
+        if(hour>12)
+        {
+            hour=hour-12;
+        }
+        var minute=now.getMinutes();
+        var second=now.getSeconds();
+        console.log(minute);
+        change(hour,minute,second);
+        ctx.translate(-150,-150);
+    }
+    setInterval(draw,1000);
+    change();
+</script>
+</html>
