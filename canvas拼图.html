@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+   <h1>Canvas拼图游戏</h1>
+   <hr/>
+   <div id="act">共计时间:
+       <span id="time">00:00:00</span>
+   </div>
+    <canvas id="mycanvas" height="400px" width="400px">
+        对不起，您的浏览器不支持Canvas
+    </canvas>
+   <div id="restar">
+       <button id="button">重新开始</button>
+   </div>
+</body>
+<script>
+    var canvas=document.querySelector("#mycanvas");
+        canvas.style.border="1px solid black";
+       var ctx=canvas.getContext("2d");
+       var img = new Image();
+            img.src="images/heartcache.jpg";
+            img.onload=function () {
+                generateNum();
+                drawCanvas();
+            };
+       var num = [[00,01,02],[10,11,12],[20,21,22]];
+       function generateNum() {
+           for(var i=0;i<50;i++)
+           {
+               var ix=Math.round(Math.random()*2);   /*两两相互随机打乱即调换位置，标位置的十位与个位，math.random取0.0-1.0之间的伪随机数，*2即为0.0-2.0间伪随机数,再通过math.round四舍五入能保证取的随机数只为0、1、2三个中的一个*/
+               var jx=Math.round(Math.random()*2);
+
+               var iy=Math.round(Math.random()*2);
+               var jy=Math.round(Math.random()*2);
+           }
+       }
+
+</script>
+</html>
